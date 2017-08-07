@@ -12,6 +12,10 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+@property (strong, nonatomic) UIStoryboard *storyboard;
+@property (strong, nonatomic) UINavigationController *navigationController;
+
++ (AppDelegate *)getAppDelegate;
 
 @end
 

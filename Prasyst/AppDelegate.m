@@ -7,6 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "IQKeyboardManager.h"
+
+#define IS_IPHONE  [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone
+#define IS_IPAD    [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad
 
 @interface AppDelegate ()
 
@@ -16,7 +20,35 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    
+    //Enabling keyboard manager
+    [[IQKeyboardManager sharedManager] setEnable:YES];
+    
+    if(self.window == nil)
+        self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    
+    if(self.navigationController == nil)
+        self.navigationController = [[UINavigationController alloc]init];
+    
+    if(self.storyboard == nil) {
+        if (IS_IPHONE) {
+        self.storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        }
+        else{
+            self.storyboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle:nil];
+        }
+    }
+    
+    self.navigationController.navigationBarHidden = YES;
+    
+    
+    [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"] animated:NO];
+    
+    
+    [self.window setRootViewController:self.navigationController];
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -47,5 +79,18 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+#pragma mark - Application Delegate Method
++ (AppDelegate *)getAppDelegate{
+    static AppDelegate* sAppDelegate = nil;
+    if(!sAppDelegate)
+    {
+        UIApplication *lApplication = [UIApplication sharedApplication];
+        if([lApplication.delegate isKindOfClass: [AppDelegate class]])
+        {
+            sAppDelegate = (AppDelegate *)lApplication.delegate;
+        }
+    }
+    return sAppDelegate;
+}
 
 @end
