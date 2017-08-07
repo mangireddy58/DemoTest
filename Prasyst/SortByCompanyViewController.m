@@ -76,21 +76,12 @@
     NSArray *array2Res = [self.sortingResponseArray objectAtIndex:1];
     NSLog(@"response %@%@", array1Res,array2Res);
     if (array1Res.count > 0) {
-//        [[array1Res valueForKey:@"branch"] objectAtIndex:indexPath.row];
         cell.typeNameLbl.text = [[array1Res valueForKey:@"branch"]objectAtIndex:indexPath.row];
         cell.amountQtyLbl.text = [NSString stringWithFormat:@"Qty= %@",[array1Res valueForKey:@"qty"]];
-//        cell.amountQtyLbl.text = [NSString stringWithFormat:@"Qty= %@, Amt=%@",[array1Res valueForKey:@"qty"],[array1Res valueForKey:@"amt"]];
     }
     else {
         cell.typeNameLbl.text = @"Data not found";
     }
-    //cell.typeNameLbl.text = [dict valueForKey:@"branch"];
-//    cell.amountQtyLbl.text = [NSString stringWithFormat:@"Qty=%@,Amt=%@",[dict objectForKey:@"qty"],[dict objectForKey:@"amt"]];;
-//    
-//    if([dict objectForKey:@"branch"] != NULL)
-//        if([[dict objectForKey:@"branch"] length] > 0)
-//            cell.typeNameLbl.text = [dict objectForKey:@"branch"];
-    
     
     [self hideProgressIndicator];
     return cell;
