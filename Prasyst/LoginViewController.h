@@ -11,6 +11,7 @@
 #import "GlobalViewController.h"
 #import "GlobalConstant.h"
 #import "ClassForServerComm.h"
+#import "AFHTTPSessionManager.h"
 
 @interface LoginViewController : GlobalViewController<ClassForServerCommDelegate, UITextFieldDelegate>
 
@@ -21,5 +22,7 @@
 @property (weak, nonatomic) IBOutlet ACFloatingTextField *passwordTxtFld;
 - (IBAction)loginBtnAction:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
+- (IBAction)showPasswordBtnAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *showPasswordBtn;
 
 @end

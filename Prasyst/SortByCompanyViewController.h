@@ -15,6 +15,7 @@
 @interface SortByCompanyViewController : GlobalViewController<ClassForServerCommDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (retain, nonatomic) NSArray *sortingResponseArray;
+@property (retain, nonatomic) NSMutableArray *branchArray,*amtArray,*qtyArray;
 @property (weak, nonatomic) IBOutlet UILabel *sortingNameLbl;
 @property (weak, nonatomic) IBOutlet UILabel *allLbl;
 @property (weak, nonatomic) IBOutlet UITableView *sortTblView;

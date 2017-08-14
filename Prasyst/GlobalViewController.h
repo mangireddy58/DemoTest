@@ -12,8 +12,10 @@
 #import "HeaderView.h"
 #import "RTSpinKitView.h"
 #import "UniversalDataModel.h"
+#import "UniversalDataModel.h"
+#import "ClassForServerComm.h"
 
-@interface GlobalViewController : UIViewController<UIGestureRecognizerDelegate, UINavigationControllerDelegate, VKSideMenuDataSource, VKSideMenuDelegate, CAAnimationDelegate>
+@interface GlobalViewController : UIViewController<UIGestureRecognizerDelegate, UINavigationControllerDelegate, VKSideMenuDataSource, VKSideMenuDelegate, CAAnimationDelegate, ClassForServerCommDelegate>
 {
     NSInteger            menuCutWidth;
     IBOutlet UIView      *mViewLoading;
@@ -37,6 +39,7 @@
 - (void) fnForinventoryDetailViewController;
 - (void) fnForAccountDetailViewController;
 - (void) fnForSortByViewController;
+- (void) fnForUnregisterethodViewController;
 - (void) showProgressIndicator;
 - (void) addProgressIndicator;
 - (void) hideProgressIndicator;

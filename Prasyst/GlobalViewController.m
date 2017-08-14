@@ -7,6 +7,7 @@
 //
 
 #import "GlobalViewController.h"
+#import "UniversalDataModel.h"
 #import "LoginViewController.h"
 #import "MainDashViewController.h"
 #import "InventoryViewController.h"
@@ -154,6 +155,43 @@
         //[self.navigationController pushViewController:sortVC animated:YES];
     }
 }
+#pragma mark - UnRegister Method
+- (void) fnForUnregisterethodViewController {
+    [self showProgressIndicator];
+    NSString *params = [NSString stringWithFormat:UNREGISTRED_QUERY,self.objUniversalDataModel.mobileNumString];
+    NSString *serviceUrl = [NSString stringWithFormat:@"%@%@", BASE_URL, UNREGISTRED_URL];
+    NSString *paramString = [NSString stringWithFormat:SERVICE_PARAMS, params, DB_NAME];
+    NSData *data = [paramString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSDictionary *parametersDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    NSString *postLength = [NSString stringWithFormat:@"%ld", (unsigned long)[data length]];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc]initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [manager.requestSerializer setTimeoutInterval:SERVICE_TIMEOUT];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    [manager.requestSerializer setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [manager.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    [manager POST:serviceUrl parameters:parametersDictionary progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *str = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSLog(@"Unregistred successfully:%@", str);
+        self.objUniversalDataModel.regUnRegString = str;
+        if ([str isEqualToString:@"0"]) {
+            [self hideProgressIndicator];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"PGSol" message:@"Unregistred successfully" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self fnForLoginAsRootViewController];
+            }];
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else {
+            [self fnForLoginAsRootViewController];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"Failure:%@", error);
+    }];
+}
 #pragma mark - Show Progressindicator
 - (void) showProgressIndicator {
     mViewLoading.hidden = NO;
@@ -208,6 +246,12 @@
     [self.view bringSubviewToFront:spinner];
     self.view.userInteractionEnabled = NO;
 }
+#pragma mark - Logout Action
+- (void) fnForLogOutBtnAction {
+    UniversalDataModel *objUniversalDataModel = [UniversalDataModel getUniversalDataModel];
+    self.objUniversalDataModel.loggedString = @"0";
+    [objUniversalDataModel clearUniversalDataModel];
+}
 #pragma mark - VKSideMenu Datasource & Delegate Methods.
 - (IBAction)fnForMenuButtonPressed:(id)sender{
     [self.view endEditing:YES];
@@ -226,12 +270,12 @@
     return (LogOut + 1);
 }
 
-
-
 - (UIView*)sideMenu:(VKSideMenu *)sideMenu viewForHeaderInSection:(NSInteger)section{
     HeaderView *headerViewObj = [[[NSBundle mainBundle] loadNibNamed:@"HeaderView" owner:self options:nil] firstObject];
-    headerViewObj.headerNamelabel.text = self.objUniversalDataModel.mainTypeString;
-    headerViewObj.headerEmailLabel.text = [NSString stringWithFormat:@"%lu",(unsigned long)self.objUniversalDataModel.client_id];
+    [headerViewObj.headerNamelabel setFont:LFONT_20];
+    [headerViewObj.headerEmailLabel setFont:LFONT_20];
+//    headerViewObj.headerNamelabel.text = self.objUniversalDataModel.mainTypeString;
+//    headerViewObj.headerEmailLabel.text = [NSString stringWithFormat:@"%lu",(unsigned long)self.objUniversalDataModel.client_id];
     return headerViewObj;
 }
 
@@ -256,9 +300,10 @@
     switch (indexPath.row)
     {
         case Unregister:
-            //[self fnForSetLocalNewsAsWindowRootVC];
+            [self fnForUnregisterethodViewController];
             break;
         case LogOut:
+            [self fnForLogOutBtnAction];
             [self fnForLoginAsRootViewController];
             break;
         default:

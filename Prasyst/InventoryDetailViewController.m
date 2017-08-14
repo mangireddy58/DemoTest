@@ -33,6 +33,7 @@
     self.objUniversalDataModel = [UniversalDataModel getUniversalDataModel];
     self.partyNameLbl.text = [[self.objUniversalDataModel.inventoryDictionary objectForKey:@"type"]capitalizedString];
     self.amountQuantityLbl.text = [NSString stringWithFormat:@"Qty=%@,Amt=%@",[self.objUniversalDataModel.inventoryDictionary objectForKey:@"qty"],[self.objUniversalDataModel.inventoryDictionary objectForKey:@"amt"]];
+    self.inventoryDetailWebView.scrollView.bounces = NO;
     self.inventoryDetailWebView.delegate = self;
     switch ((VIEWHEIGHT == 568)?1:((VIEWHEIGHT == 667)?2:3)) {
         case 1:{
@@ -85,16 +86,6 @@
         [self.sortingView setHidden:YES];
     }
 }
-//- (void)webViewDidFinishLoad:(UIWebView *)aWebView {
-//    CGRect frame = aWebView.frame;
-//    frame.size.height = 1;
-//    aWebView.frame = frame;
-//    CGSize fittingSize = [aWebView sizeThatFits:CGSizeZero];
-//    frame.size = fittingSize;
-//    aWebView.frame = frame;
-//    
-//    NSLog(@"size: %f, %f", fittingSize.width, fittingSize.height);
-//}
 #pragma mark - ServerComm Delegate Method
 - (void)onWebViewServiceSuccess:(NSString *)resString {
     NSLog(@"Webview Details %@", resString);
@@ -110,7 +101,6 @@
                 case sort_by_category_url_tag: {
                     @try {
                         [self.inventoryDetailWebView loadHTMLString:resString baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-//                        [self.inventoryDetailWebView reload];
                         [self hideProgressIndicator];
                     } @catch (NSException *exception) {
                         NSLog(@"Service Error");
@@ -121,7 +111,6 @@
                 case sort_by_date_asc_url_tag: {
                     @try {
                         [self.inventoryDetailWebView loadHTMLString:resString baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-//                        [self.inventoryDetailWebView reload];
                         [self hideProgressIndicator];
                     } @catch (NSException *exception) {
                         NSLog(@"Service Error");
@@ -132,7 +121,6 @@
                 case sort_by_date_desc_url_tag: {
                     @try {
                         [self.inventoryDetailWebView loadHTMLString:resString baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-//                        [self.inventoryDetailWebView reload];
                         [self hideProgressIndicator];
                     } @catch (NSException *exception) {
                         NSLog(@"Service Error");
@@ -143,7 +131,6 @@
                 case sort_by_party_name_url_tag: {
                     @try {
                         [self.inventoryDetailWebView loadHTMLString:resString baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-//                        [self.inventoryDetailWebView reload];
                         [self hideProgressIndicator];
                     } @catch (NSException *exception) {
                         NSLog(@"Service Error");
@@ -160,25 +147,9 @@
         }
     }
 }
-
-//- (void)webViewDidFinishLoad:(UIWebView *)theWebView
-//{
-//    CGSize contentSize = theWebView.scrollView.contentSize;
-//    CGSize viewSize = theWebView.bounds.size;
-//    
-//    float rw = viewSize.width / contentSize.width;
-//    
-//    theWebView.scrollView.minimumZoomScale = rw;
-//    theWebView.scrollView.maximumZoomScale = rw;
-//    theWebView.scrollView.zoomScale = rw;
-////    CGFloat height = theWebView.scrollView.contentSize.height;
-//    
-//    //[theWebView.scrollView setContentSize: CGSizeMake(theWebView.frame.size.width, theWebView.scrollView.contentSize.height)];
-//}
-
-//-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-//    [scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y)];
-//}
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    
+}
 #pragma mark - Servercomm
 - (void)onServiceSuccess:(id)response {
     NSLog(@"Response %@", response);
@@ -188,13 +159,10 @@
                 case sort_by_branch_url_tag: {
                     NSArray *responseArray = (NSArray *)response;
                     if([responseArray count] > 0){
-//                        NSArray *responseArray1 = [responseArray objectAtIndex:0];
-//                        if([responseArray1 count] > 0){
                             self.objUniversalDataModel.soryByBranchDataArray = responseArray;
                             NSLog(@"Sory by branch response %@", self.objUniversalDataModel.soryByBranchDataArray);
                             [self hideProgressIndicator];
                             [self fnForSortByViewController];
-//                        }
                     }
                 }
                     break;
@@ -206,12 +174,6 @@
                             NSLog(@"Sory by company response %@", self.objUniversalDataModel.soryByCompanyDataArray);
                             [self hideProgressIndicator];
                             [self fnForSortByViewController];
-//                            NSArray *responseArray1 = [responseArray objectAtIndex:0];
-//                            if([responseArray1 count] > 0){
-//                                self.objUniversalDataModel.soryByCompanyDataArray = responseArray;
-//                                NSLog(@"Sory by company response %@", self.objUniversalDataModel.soryByCompanyDataArray);
-                            
-//                            }
                         }
                     } @catch (NSException *exception) {
                         NSLog(@"Server error");
@@ -257,6 +219,7 @@
                 ClassForServerComm *objServerComm = [[ClassForServerComm alloc]init];
                 objServerComm.delegate = self;
                 kWebServiceFlag = sort_by_branch_url_tag;
+                self.objUniversalDataModel.sortingString = INVENTORY_SORT_BY_BRANCH;
                 [objServerComm sendHttpPostRequestWithParam:sqlQuery andServiceName:SORT_BY_BRANCH_URL];
             }
             break;
@@ -266,6 +229,7 @@
                 ClassForServerComm *objServerComm = [[ClassForServerComm alloc]init];
                 objServerComm.delegate = self;
                 kWebServiceFlag = sort_by_company_url_tag;
+                self.objUniversalDataModel.sortingString = INVENTORY_SORT_BY_COMPANY;
                 [objServerComm sendHttpPostRequestWithParam:sqlQuery andServiceName:SORT_BY_COMPANY_URL];
             }
             break;

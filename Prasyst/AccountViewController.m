@@ -18,7 +18,6 @@
     [super viewDidLoad];
     
     self.responseArray = self.objUniversalDataModel.accountsDataArray;
-    
     self.accountTblView.dataSource = self;
     self.accountTblView.delegate = self;
     [self.accountTblView reloadData];

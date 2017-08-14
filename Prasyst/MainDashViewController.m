@@ -46,10 +46,12 @@
     self.countLbl.layer.cornerRadius = 8.0;
     self.typeNameLbl.text = self.objUniversalDataModel.mainTypeString;
     self.idNameLbl.text = [NSString stringWithFormat:@"id: %lu",(unsigned long)self.objUniversalDataModel.client_id];
-    self.fromDateTxtFld.text = @"2017-04-01";
-    self.toDateTextFld.text = @"2017-07-14";
-    self.objUniversalDataModel.fromDateString = @"2017-04-01";
-    self.objUniversalDataModel.toDateString = @"2017-07-14";
+    //self.fromDateTxtFld.text = @"2017-04-01";
+    //self.toDateTextFld.text = @"2017-07-14";
+    //self.objUniversalDataModel.fromDateString = @"2017-04-01";
+    //self.objUniversalDataModel.toDateString = @"2017-07-14";
+    
+    //self.objUniversalDataModel.client_id = 5015;
     
     self.inventoryBtn.hidden = YES;
     self.accountBtn.hidden = YES;
@@ -194,7 +196,7 @@
                     @try {
                         [self hideProgressIndicator];
                         NSArray *responseArray = (NSArray *)response;
-                        NSLog(@"Inventory response: %@", responseArray);
+                        NSLog(@"Account response: %@", responseArray);
                     } @catch (NSException *exception) {
                         NSLog(@"Service Error");
                     }
@@ -220,8 +222,12 @@
 - (IBAction)accountBtnAction:(id)sender {
     [self fnForMainAsAccountViewController];
 }
-
+#pragma mark - Logout Action
 - (IBAction)logOutAction:(id)sender {
+    UniversalDataModel *objUniversalDataModel = [UniversalDataModel getUniversalDataModel];
+    self.objUniversalDataModel.loggedString = @"0";
+    [objUniversalDataModel clearUniversalDataModel];
+    [self fnForLoginAsRootViewController];   
 }
 
 - (IBAction)fromToDateBtnAction:(UIButton *)sender {

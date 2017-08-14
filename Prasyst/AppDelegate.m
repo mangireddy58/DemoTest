@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "IQKeyboardManager.h"
+#import "UniversalDataModel.h"
+#import "GlobalViewController.h"
 
 #define IS_IPHONE  [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone
 #define IS_IPAD    [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad
@@ -21,7 +23,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    
+//    UniversalDataModel *objUniversalDataModel = [UniversalDataModel getUniversalDataModel];
     //Enabling keyboard manager
     [[IQKeyboardManager sharedManager] setEnable:YES];
     
@@ -38,14 +40,15 @@
         else{
             self.storyboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle:nil];
         }
-    }
-    
+    } 
     self.navigationController.navigationBarHidden = YES;
-    
-    
-    [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"] animated:NO];
-    
-    
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    if ([[defaults objectForKey:@"userLoggedIn"] integerValue] == 1) {
+//        [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"MainDashViewController"] animated:NO];
+//    }
+//    else {
+        [self.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"] animated:NO];
+//    }
     [self.window setRootViewController:self.navigationController];
     [self.window makeKeyAndVisible];
     

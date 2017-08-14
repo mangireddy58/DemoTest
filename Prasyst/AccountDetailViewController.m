@@ -19,7 +19,6 @@
     
     [self loadInputViews];
     [self loadDetailWebView];
-    self.accountDetailWebView.delegate = self;
 }
 - (void) loadInputViews {
     [self addProgressIndicator];
@@ -29,6 +28,15 @@
     self.objUniversalDataModel = [UniversalDataModel getUniversalDataModel];
     self.typeNameLbl.text = [[self.objUniversalDataModel.accountDictionary objectForKey:@"type"]capitalizedString];
     self.amountQtyLbl.text = [NSString stringWithFormat:@"Qty=%@,Amt=%@",[self.objUniversalDataModel.accountDictionary objectForKey:@"qty"],[self.objUniversalDataModel.accountDictionary objectForKey:@"amt"]];
+    self.accountDetailWebView.scrollView.bounces = NO;
+    self.accountDetailWebView.delegate = self;
+    self.objUniversalDataModel.soryByBranchDataArray = @[];
+    self.objUniversalDataModel.soryByCompanyDataArray = @[];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]init];
+    [tapGesture addTarget:self action:@selector(handleSingleTap:)];
+    [tapGesture setCancelsTouchesInView:NO];
+    [self.view addGestureRecognizer:tapGesture];
+    
     switch ((VIEWHEIGHT == 568)?1:((VIEWHEIGHT == 667)?2:3)) {
         case 1:{
             self.typeNameLbl.font = BFONT_13;
@@ -73,7 +81,13 @@
     kWebServiceFlag = account_details_tag;
     [objServerComm sendHttpRequestWithParam:sqlQuery andServiceName:ACCOUNT_DETAILS_URL];
 }
-
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    for (UIView *thisView in self.accountDetailWebView.scrollView.subviews)
+    {
+        thisView.userInteractionEnabled = NO;
+        [self.sortingView setHidden:YES];
+    }
+}
 #pragma mark - ServerComm Delegate Method
 - (void)onWebViewServiceSuccess:(NSString *)resString {
     NSLog(@"Webview Details %@", resString);
@@ -89,7 +103,6 @@
                     case sort_by_category_url_tag: {
                         @try {
                             [self.accountDetailWebView loadHTMLString:resString baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-//                            [self.accountDetailWebView reload];
                             [self hideProgressIndicator];
                         } @catch (NSException *exception) {
                             NSLog(@"Service Error");
@@ -100,7 +113,6 @@
                     case sort_by_date_asc_url_tag: {
                         @try {
                             [self.accountDetailWebView loadHTMLString:resString baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-//                            [self.accountDetailWebView reload];
                             [self hideProgressIndicator];
                         } @catch (NSException *exception) {
                             NSLog(@"Service Error");
@@ -111,7 +123,6 @@
                     case sort_by_date_desc_url_tag: {
                         @try {
                             [self.accountDetailWebView loadHTMLString:resString baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-//                            [self.accountDetailWebView reload];
                             [self hideProgressIndicator];
                         } @catch (NSException *exception) {
                             NSLog(@"Service Error");
@@ -122,7 +133,6 @@
                     case sort_by_party_name_url_tag: {
                         @try {
                             [self.accountDetailWebView loadHTMLString:resString baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
-//                            [self.accountDetailWebView reload];
                             [self hideProgressIndicator];
                         } @catch (NSException *exception) {
                             NSLog(@"Service Error");
@@ -148,12 +158,10 @@
                     case sort_by_branch_url_tag: {
                         NSArray *responseArray = (NSArray *)response;
                         if([responseArray count] > 0){
-                            NSArray *responseArray1 = [responseArray objectAtIndex:0];
-                            if([responseArray1 count] > 0){
-                                self.objUniversalDataModel.soryByBranchDataArray = responseArray1;
-                                NSLog(@"Sory by branch response %@", self.objUniversalDataModel.soryByBranchDataArray);
-                                [self hideProgressIndicator];
-                            }
+                            self.objUniversalDataModel.soryByBranchDataArray = responseArray;
+                            NSLog(@"Sory by branch response %@", self.objUniversalDataModel.soryByBranchDataArray);
+                            [self hideProgressIndicator];
+                            [self fnForSortByViewController];
                         }
                     }
                     [self hideProgressIndicator];
@@ -162,12 +170,10 @@
                         @try {
                             NSArray *responseArray = (NSArray *)response;
                             if([responseArray count] > 0){
-                                NSArray *responseArray1 = [responseArray objectAtIndex:0];
-                                if([responseArray1 count] > 0){
-                                    self.objUniversalDataModel.soryByCompanyDataArray = responseArray1;
-                                    NSLog(@"Sory by company response %@", self.objUniversalDataModel.soryByCompanyDataArray);
-                                    [self hideProgressIndicator];
-                                }
+                                self.objUniversalDataModel.soryByCompanyDataArray = responseArray;
+                                NSLog(@"Sory by company response %@", self.objUniversalDataModel.soryByCompanyDataArray);
+                                [self hideProgressIndicator];
+                                [self fnForSortByViewController];
                             }
                         } @catch (NSException *exception) {
                             NSLog(@"Server error");
@@ -199,19 +205,21 @@
     switch (sortBtn.tag) {
             case 1: {
                 [self showProgressIndicator];
-                NSString *sqlQuery = [NSString stringWithFormat: SORT_BY_BRANCH_ACCOUNT_QUERY,[self.objUniversalDataModel.inventoryDictionary objectForKey:@"type"], (unsigned long)self.objUniversalDataModel.client_id,self.objUniversalDataModel.fromDateString, self.objUniversalDataModel.toDateString, (unsigned long)self.objUniversalDataModel.client_id];
+                NSString *sqlQuery = [NSString stringWithFormat: SORT_BY_BRANCH_ACCOUNT_QUERY,[self.objUniversalDataModel.accountDictionary objectForKey:@"type"], (unsigned long)self.objUniversalDataModel.client_id,self.objUniversalDataModel.fromDateString, self.objUniversalDataModel.toDateString, (unsigned long)self.objUniversalDataModel.client_id];
                 ClassForServerComm *objServerComm = [[ClassForServerComm alloc]init];
                 objServerComm.delegate = self;
                 kWebServiceFlag = sort_by_branch_url_tag;
+                self.objUniversalDataModel.sortingString = ACCOUNT_SORT_BY_BRANCH;
                 [objServerComm sendHttpPostRequestWithParam:sqlQuery andServiceName:SORT_BY_BRANCH_URL];
             }
             break;
             case 2: {
                 [self showProgressIndicator];
-                NSString *sqlQuery = [NSString stringWithFormat:SORT_BY_COMPANY_ACCOUNT_QUERY,[self.objUniversalDataModel.inventoryDictionary objectForKey:@"type"],(unsigned long)self.objUniversalDataModel.client_id,self.objUniversalDataModel.fromDateString,self.objUniversalDataModel.toDateString,(unsigned long)self.objUniversalDataModel.client_id];
+                NSString *sqlQuery = [NSString stringWithFormat:SORT_BY_COMPANY_ACCOUNT_QUERY,[self.objUniversalDataModel.accountDictionary objectForKey:@"type"],(unsigned long)self.objUniversalDataModel.client_id,self.objUniversalDataModel.fromDateString,self.objUniversalDataModel.toDateString,(unsigned long)self.objUniversalDataModel.client_id];
                 ClassForServerComm *objServerComm = [[ClassForServerComm alloc]init];
                 objServerComm.delegate = self;
                 kWebServiceFlag = sort_by_company_url_tag;
+                self.objUniversalDataModel.sortingString = ACCOUNT_SORT_BY_COMPANY;
                 [objServerComm sendHttpPostRequestWithParam:sqlQuery andServiceName:SORT_BY_COMPANY_URL];
             }
             break;

@@ -333,10 +333,10 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    //if (smiPhone5Above)
-      //  return SM_USER_IPHONE5ABOVE;
-    //else
-       // return SM_USER_IPHONE5BELOW;
+//    if (smiPhone5Above)
+//        return SM_USER_IPHONE5ABOVE;
+//    else
+//        return SM_USER_IPHONE5BELOW;
     return 200;
 }
 

@@ -23,12 +23,13 @@
 #define SERVICE_TIMEOUT 60.0
 
 #define STATUS_BAR_HEIGHT 0//20
-//Menu Cell Height
-#define SM_IPHONE5ABOVE 58
-#define SM_IPHONE5BELOW 52
 
-#define SM_USER_IPHONE5ABOVE 240
-#define SM_USER_IPHONE5BELOW 180
+//Menu Cell Height
+#define SM_IPHONE5ABOVE 56
+#define SM_IPHONE5BELOW 50
+
+#define SM_USER_IPHONE5ABOVE 280
+#define SM_USER_IPHONE5BELOW 200
 
 
 #define kMobileNumberLimit 10
@@ -37,7 +38,7 @@
 
 #pragma mark - Base URL's
 //Development
-#define BASE_URL @""
+#define BASE_URL @"http://mexicojeans.com/webservice/android/"
 
 #pragma mark - DB
 #define DB_NAME @"mexictfp_cloud"
@@ -50,7 +51,8 @@
 #define INVENTORY_URL     @"GetValues.php"
 #define INVENTORY_DETAILS_URL @"GetWeb.php"
 #define ACCOUNT_DETAILS_URL @"GetWeb.php"
-
+#define REGISTRED_URL @"InsertValue.php"
+#define UNREGISTRED_URL @"InsertValue.php"
 #define SORT_BY_BRANCH_URL @"GetValues.php"
 #define SORT_BY_COMPANY_URL @"GetValues.php"
 #define SORT_BY_CATEGORY_URL @"GetWeb.php"
@@ -65,6 +67,10 @@
 #define LOGIN_QUERY    @"select id, name, password, status, imei from customer where mobile=%@"
 
 #define GET_DATA_QUERY @"SELECT count(*) as count FROM datasync where client_key=%lu and doc_date between date('%@') and date('%@')"
+
+#define REGISTRED_QUERY @"update customer set imei='%@' where mobile='%@'"
+
+#define UNREGISTRED_QUERY @"update customer set imei='' where mobile='%@'"
 
 #define INVENTORY_QUERY @"SELECT TRANSACTION_TYPE as 'type', SUM(QTY) as 'qty', SUM(AMOUNT) as 'amt' FROM datasync WHERE client_key=%lu and DOC_DATE BETWEEN date('%@') AND date('%@') group by TRANSACTION_TYPE"
 
@@ -104,6 +110,8 @@ typedef NS_ENUM(NSInteger, serviceURLTags) {
     get_data_url_tag,
     inventory_url_tag,
     account_url_tag,
+    registred_url_tag,
+    unregister_url_tag,
     inventory_details_tag,
     account_details_tag,
     sort_by_branch_url_tag,
@@ -119,6 +127,13 @@ typedef enum
     Unregister=0,
     LogOut
 }menu;
+
+#pragma mark - Sorting
+
+#define INVENTORY_SORT_BY_BRANCH @"inventorybranch"
+#define INVENTORY_SORT_BY_COMPANY @"inventorycompany"
+#define ACCOUNT_SORT_BY_BRANCH @"accountbranch"
+#define ACCOUNT_SORT_BY_COMPANY @"iaccountcompany"
 
 #pragma mark - Font
 

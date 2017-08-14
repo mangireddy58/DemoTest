@@ -20,11 +20,14 @@ static UniversalDataModel * sUniversalDataModel = nil;
 @synthesize fromDateString = mFromDateString;
 @synthesize toDateString = mTodateString;
 @synthesize mainTypeString = mMainTypeString;
+@synthesize sortingString = msortingString;
+@synthesize regUnRegString = mRegUnRegString;
+@synthesize mobileNumString = mMobileNumString;
+@synthesize loggedString = mLoggedString;
 @synthesize universalDictionary;
 @synthesize generalDataArray = mGeneralDataArray;
 @synthesize inventoryDataArray = mInventoryDataArray;
 @synthesize accountsDataArray = mAccountsDataArray;
-
 @synthesize soryByBranchDataArray = mSortByBranchDataArray;
 @synthesize soryByCompanyDataArray = mSortByCompanyDataArray;
 
@@ -42,6 +45,7 @@ static UniversalDataModel * sUniversalDataModel = nil;
 -(void)clearUniversalDataModel{
     self.dataDictionary = nil;
     self.dataString = nil;
+    self.regUnRegString = nil;
     self.dataArray = nil;
     self.inventoryDictionary = nil;
     self.accountDictionary = nil;
@@ -49,7 +53,7 @@ static UniversalDataModel * sUniversalDataModel = nil;
     self.inventoryDataArray = nil;
     self.accountsDataArray = nil;
     self.mainTypeString = nil;
-    
+    self.sortingString = nil;
     self.soryByBranchDataArray = nil;
     self.soryByCompanyDataArray = nil;
 }
