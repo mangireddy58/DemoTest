@@ -52,7 +52,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.responseArray.count;
+    return inventoryArray.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (IS_IPHONE) {
@@ -73,31 +73,59 @@
     cell.viewBtn.tag = indexPath.row;
     [cell.viewBtn addTarget:self action:@selector(viewButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    NSDictionary *dict = [self.responseArray objectAtIndex:indexPath.row];
-    
-    if([dict valueForKey:@"type"] != NULL)
-        if([[dict valueForKey:@"type"] length] > 0)
-            cell.inventoryNameLabel.text =  [[dict valueForKey:@"type"]capitalizedString];
-    
-    cell.quantityTxtFld.text = @"0";
-    if([dict valueForKey:@"qty"] != NULL)
-        if([[dict valueForKey:@"qty"] integerValue] > 0)
-            cell.quantityTxtFld.text = [dict valueForKey:@"qty"];
-        
+    cell.inventoryNameLabel.text = [inventoryArray objectAtIndex:indexPath.row];
     cell.amountTxtFld.text = @"0";
-    if([dict valueForKey:@"amt"] != NULL)
-        if([[dict valueForKey:@"amt"] integerValue] > 0)
-            cell.amountTxtFld.text = [dict valueForKey:@"amt"];
+    cell.quantityTxtFld.text = @"0";
+    
+    NSString *stringName = [[[inventoryArray objectAtIndex:indexPath.row] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    for (NSDictionary *dict in self.responseArray) {
+        if([dict valueForKey:@"type"] != NULL)
+            if([[dict valueForKey:@"type"] length] > 0){
+                if([[[dict valueForKey:@"type"] lowercaseString] isEqualToString:stringName]){
+                    if([dict valueForKey:@"amt"] != NULL)
+                        if([[dict valueForKey:@"amt"] integerValue] > 0)
+                            cell.amountTxtFld.text = [dict valueForKey:@"amt"];
+                    
+                    if([dict valueForKey:@"qty"] != NULL)
+                        if([[dict valueForKey:@"qty"] integerValue] > 0)
+                            cell.quantityTxtFld.text = [dict valueForKey:@"qty"];
+                }
+            }
+    }
     
     return cell;
 }
 
 - (void) viewButtonPressed:(UIButton *)sender {
     UIButton *viewButton = (UIButton *)sender;
-    self.objUniversalDataModel.inventoryDictionary = [self.responseArray objectAtIndex:viewButton.tag];
+    bool isValFound = false;
+    int i=-1;
+    NSString *stringName = [inventoryArray objectAtIndex:viewButton.tag];
+    for(NSDictionary *dic in self.responseArray){
+        i++;
+        if([[[dic valueForKey:@"type"] lowercaseString] isEqualToString:[[stringName lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@""]]){
+            NSLog(@"Succes value there");
+            isValFound = true;
+            self.objUniversalDataModel.inventoryDictionary = [self.responseArray objectAtIndex:i];
+            
+        }else{
+            NSLog(@"Succes value not there");
+            NSDictionary *dic = [[NSDictionary alloc] init];
+            if(!isValFound){
+                dic = @{@"type":stringName,@"amt":@"0",@"qty":@"0"};
+                self.objUniversalDataModel.inventoryDictionary = dic;
+            }else{
+                
+            }
+        }
+    }
     [self fnForinventoryDetailViewController];
     
 }
+
+
+
 - (IBAction)backBtnAction:(id)sender {
     [self fnForMainDashAsRootViewController];
 }

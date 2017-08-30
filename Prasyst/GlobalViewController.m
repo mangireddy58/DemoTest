@@ -175,9 +175,11 @@
     [manager POST:serviceUrl parameters:parametersDictionary progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *str = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSLog(@"Unregistred successfully:%@", str);
-        self.objUniversalDataModel.regUnRegString = str;
-        if ([str isEqualToString:@"0"]) {
+        if ([str isEqualToString:@"1"]) {
             [self hideProgressIndicator];
+            UserDataModel *objUserDataModel = [UserDataModel getUserDataModel];
+            [objUserDataModel clearUserDataModel];
+            
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"PGSol" message:@"Unregistred successfully" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self fnForLoginAsRootViewController];
@@ -191,6 +193,15 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"Failure:%@", error);
     }];
+}
+#pragma amrk - No data available
+- (void) fnForNoDataAvailable:(NSString *)messageStr {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"PGSOl" message:messageStr preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alert addAction:ok];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 #pragma mark - Show Progressindicator
 - (void) showProgressIndicator {

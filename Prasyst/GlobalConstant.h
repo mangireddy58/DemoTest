@@ -44,6 +44,8 @@
 #define DB_NAME @"mexictfp_cloud"
 #define SQL_NAME @"sql"
 
+#define USER_ENTITY_NAME @"UserDataEntity"
+
 #pragma mark - ServiceNames
 
 #define LOGIN_URL         @"GetValues.php"

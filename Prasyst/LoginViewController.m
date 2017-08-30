@@ -20,6 +20,13 @@
     
     [self loadInputViews];
 }
+
+- (void)viewDidAppear:(BOOL)animated{
+    NSLog(@"%@, %@", [UserDataModel getUserDataModel].userName, [UserDataModel getUserDataModel].password);
+    self.mobileNoTxtFld.text = [UserDataModel getUserDataModel].userName;
+    self.passwordTxtFld.text = [UserDataModel getUserDataModel].password;
+}
+
 - (void) loadInputViews {
     self.mobileNoTxtFld.selectedPlaceHolderColor = [UIColor colorWithRed:252.0/255.0 green:69.0/255.0 blue:130.0/255.0 alpha:1.0];
     self.passwordTxtFld.selectedPlaceHolderColor = [UIColor colorWithRed:252.0/255.0 green:69.0/255.0 blue:130.0/255.0 alpha:1.0];
@@ -33,8 +40,8 @@
     [self addProgressIndicator];
     [self hideProgressIndicator];
     
-    self.mobileNoTxtFld.text = @"8779163857";
-    self.passwordTxtFld.text = @"2017";
+   // self.mobileNoTxtFld.text = @"8779163857";
+    //self.passwordTxtFld.text = @"2017";
     
     switch ((VIEWHEIGHT == 568)?1:((VIEWHEIGHT == 667)?2:3)) {
         case 1:{
@@ -57,35 +64,6 @@
 
 #pragma mark - Login Button
 - (IBAction)loginBtnAction:(id)sender {
-    if ([self.objUniversalDataModel.regUnRegString isEqualToString:@"0"]) {
-        if ([self.mobileNoTxtFld.text isEqualToString:self.objUniversalDataModel.mobileNumString]) {
-            NSLog(@"register");
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Register" message:@"Do you want to register" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            UIAlertAction *regi = [UIAlertAction actionWithTitle:@"REGISTER" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self showProgressIndicator];
-                NSString *lLoginParams = [NSString stringWithFormat:LOGIN_QUERY,self.mobileNoTxtFld.text];
-                ClassForServerComm *objForServerComm = [[ClassForServerComm alloc] init];
-                objForServerComm.delegate = self;
-                kWebServiceFlag = login_url_tag;
-                [objForServerComm sendHttpPostRequestWithParam:lLoginParams andServiceName:LOGIN_URL];
-            }];
-            [alert addAction:no];
-            [alert addAction:regi];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-        else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"PGSol" message:@"Invalid credentials" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            [alert addAction:ok];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }
-    else {
         if ((self.mobileNoTxtFld.text.length < 10 )) {
             [self.mobileNoTxtFld becomeFirstResponder];
         }
@@ -93,18 +71,44 @@
             [self.passwordTxtFld becomeFirstResponder];
         }
         else {
-            [self showProgressIndicator];
-            NSString *deviceUUID = [[[UIDevice currentDevice] identifierForVendor]UUIDString];
-            NSLog(@"imei %@",deviceUUID);
-            self.objUniversalDataModel.mobileNumString = self.mobileNoTxtFld.text;
-            NSString *lLoginParams = [NSString stringWithFormat:LOGIN_QUERY,self.mobileNoTxtFld.text];
-            ClassForServerComm *objForServerComm = [[ClassForServerComm alloc] init];
-            objForServerComm.delegate = self;
-            kWebServiceFlag = login_url_tag;
-            [objForServerComm sendHttpPostRequestWithParam:lLoginParams andServiceName:LOGIN_URL];
+            if([UserDataModel getUserDataModel].userName.length > 0 && [UserDataModel getUserDataModel].password.length > 0){
+                [self showProgressIndicator];
+                [self fnForLoginService];
+            }
+            else{
+                NSLog(@"register");
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Register" message:@"Do you want to register" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }];
+                UIAlertAction *regi = [UIAlertAction actionWithTitle:@"REGISTER" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self showProgressIndicator];
+                    NSString *deviceUUID = [[[UIDevice currentDevice] identifierForVendor]UUIDString];
+                    NSLog(@"imei %@",deviceUUID);
+                    NSString *lLoginParams = [NSString stringWithFormat:REGISTRED_QUERY,deviceUUID, self.mobileNoTxtFld.text];
+                    ClassForServerComm *objForServerComm = [[ClassForServerComm alloc] init];
+                    objForServerComm.delegate = self;
+                    kWebServiceFlag = login_url_tag;
+                    [objForServerComm sendHttpRequestWithParam:lLoginParams andServiceName:REGISTRED_URL];
+                }];
+                [alert addAction:no];
+                [alert addAction:regi];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
         }
-    }
 }
+
+- (void)fnForLoginService{
+    NSString *deviceUUID = [[[UIDevice currentDevice] identifierForVendor]UUIDString];
+    NSLog(@"imei %@",deviceUUID);
+    self.objUniversalDataModel.mobileNumString = self.mobileNoTxtFld.text;
+    NSString *lLoginParams = [NSString stringWithFormat:LOGIN_QUERY,self.mobileNoTxtFld.text];
+    ClassForServerComm *objForServerComm = [[ClassForServerComm alloc] init];
+    objForServerComm.delegate = self;
+    kWebServiceFlag = login_url_tag;
+    [objForServerComm sendHttpPostRequestWithParam:lLoginParams andServiceName:LOGIN_URL];
+}
+
 #pragma mark - Server communication delegate methods
 -(void)onServiceSuccess:(id)response{
     [self hideProgressIndicator];
@@ -121,7 +125,12 @@
                                 NSDictionary *responseDict = [responseArray1 objectAtIndex:0];
                                 if([responseDict count] > 0){
                                     if([responseDict objectForKey:@"id"] != NULL){
-                                        NSLog(@"client_id: %ld", [[responseDict objectForKey:@"id"] integerValue]);
+                                        
+                                        UserDataModel *objUserDataModel = [UserDataModel getUserDataModel];
+                                        [objUserDataModel saveUserData:self.mobileNoTxtFld.text password:self.passwordTxtFld.text];
+                                        
+                                        
+                                        //NSLog(@"client_id: %d", [[responseDict objectForKey:@"id"] integerValue]);
 //                                        self.objUniversalDataModel.loggedString = @"1";
                                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                         [defaults setObject:@"1" forKey:@"userLoggedIn"];
@@ -153,6 +162,17 @@
         
     }
 }
+
+- (void)onWebViewServiceSuccess:(NSString *)resString{
+    if([resString isEqualToString:@"0"]){
+        [self performSelector:@selector(fnForLoginService) withObject:nil afterDelay:0.5];
+    }
+    else{
+        [self hideProgressIndicator];
+        [self fnForNoDataAvailable:@"Invalid credentials"];
+    }
+}
+
 - (void)onServiceFailed {
     [self hideProgressIndicator];
     NSLog(@"service failed");

@@ -35,6 +35,7 @@
     self.amountQuantityLbl.text = [NSString stringWithFormat:@"Qty=%@,Amt=%@",[self.objUniversalDataModel.inventoryDictionary objectForKey:@"qty"],[self.objUniversalDataModel.inventoryDictionary objectForKey:@"amt"]];
     self.inventoryDetailWebView.scrollView.bounces = NO;
     self.inventoryDetailWebView.delegate = self;
+    
     switch ((VIEWHEIGHT == 568)?1:((VIEWHEIGHT == 667)?2:3)) {
         case 1:{
             self.partyNameLbl.font = BFONT_13;

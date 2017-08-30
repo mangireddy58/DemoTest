@@ -12,6 +12,7 @@
 #import "GlobalConstant.h"
 #import "ClassForServerComm.h"
 #import "AFHTTPSessionManager.h"
+#import "UserDataModel.h"
 
 @interface LoginViewController : GlobalViewController<ClassForServerCommDelegate, UITextFieldDelegate>
 

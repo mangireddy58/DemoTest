@@ -21,7 +21,6 @@ static UniversalDataModel * sUniversalDataModel = nil;
 @synthesize toDateString = mTodateString;
 @synthesize mainTypeString = mMainTypeString;
 @synthesize sortingString = msortingString;
-@synthesize regUnRegString = mRegUnRegString;
 @synthesize mobileNumString = mMobileNumString;
 @synthesize loggedString = mLoggedString;
 @synthesize universalDictionary;
@@ -45,7 +44,8 @@ static UniversalDataModel * sUniversalDataModel = nil;
 -(void)clearUniversalDataModel{
     self.dataDictionary = nil;
     self.dataString = nil;
-    self.regUnRegString = nil;
+    self.fromDateString = nil;
+    self.toDateString = nil;
     self.dataArray = nil;
     self.inventoryDictionary = nil;
     self.accountDictionary = nil;

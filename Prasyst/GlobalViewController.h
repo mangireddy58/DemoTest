@@ -46,4 +46,6 @@
 - (void) showProgressIndicatorWithMessage:(NSString*)loadingStr;
 - (IBAction)fnForGeneralBackButtonPressed:(id)sender;
 
+- (void) fnForNoDataAvailable:(NSString *)messageStr;
+
 @end

@@ -15,6 +15,9 @@
 		32A3F1981F1FC437004599C2 /* RTSpinKitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A3F1941F1FC437004599C2 /* RTSpinKitView.m */; };
 		32A3F1991F1FC437004599C2 /* RTSpinKitUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A3F1961F1FC437004599C2 /* RTSpinKitUtils.m */; };
 		32A3F19C1F1FC557004599C2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A3F19B1F1FC557004599C2 /* UIKit.framework */; };
+		32AF5B961F4B53A700E9480E /* Prasyst.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 32AF5B941F4B53A700E9480E /* Prasyst.xcdatamodeld */; };
+		32AF5B9A1F4B547500E9480E /* UserDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AF5B991F4B547500E9480E /* UserDataModel.m */; };
+		32AF5B9C1F4B564700E9480E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AF5B9B1F4B564700E9480E /* CoreData.framework */; };
 		32BC4B211F1A4BBE00C634F0 /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BC4B201F1A4BBE00C634F0 /* HeaderView.m */; };
 		32BC4B231F1A4BD400C634F0 /* HeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32BC4B221F1A4BD400C634F0 /* HeaderView.xib */; };
 		32BD9DA01F1A163700386465 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD9D9F1F1A163700386465 /* main.m */; };
@@ -61,6 +64,10 @@
 		32A3F1951F1FC437004599C2 /* RTSpinKitUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTSpinKitUtils.h; sourceTree = "<group>"; };
 		32A3F1961F1FC437004599C2 /* RTSpinKitUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTSpinKitUtils.m; sourceTree = "<group>"; };
 		32A3F19B1F1FC557004599C2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		32AF5B951F4B53A700E9480E /* Prasyst.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Prasyst.xcdatamodel; sourceTree = "<group>"; };
+		32AF5B981F4B547500E9480E /* UserDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataModel.h; sourceTree = "<group>"; };
+		32AF5B991F4B547500E9480E /* UserDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataModel.m; sourceTree = "<group>"; };
+		32AF5B9B1F4B564700E9480E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		32BC4B1F1F1A4BBE00C634F0 /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
 		32BC4B201F1A4BBE00C634F0 /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		32BC4B221F1A4BD400C634F0 /* HeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderView.xib; sourceTree = "<group>"; };
@@ -119,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32AF5B9C1F4B564700E9480E /* CoreData.framework in Frameworks */,
 				32D8F38D1F27C0DD0034DF0E /* Photos.framework in Frameworks */,
 				32D8F38E1F27C0DD0034DF0E /* PhotosUI.framework in Frameworks */,
 				32A3F19C1F1FC557004599C2 /* UIKit.framework in Frameworks */,
@@ -180,6 +188,23 @@
 			name = SpinnerView;
 			sourceTree = "<group>";
 		};
+		32AF5B931F4B536300E9480E /* DataBase */ = {
+			isa = PBXGroup;
+			children = (
+				32AF5B941F4B53A700E9480E /* Prasyst.xcdatamodeld */,
+			);
+			name = DataBase;
+			sourceTree = "<group>";
+		};
+		32AF5B971F4B542800E9480E /* UserDataModel */ = {
+			isa = PBXGroup;
+			children = (
+				32AF5B981F4B547500E9480E /* UserDataModel.h */,
+				32AF5B991F4B547500E9480E /* UserDataModel.m */,
+			);
+			name = UserDataModel;
+			sourceTree = "<group>";
+		};
 		32BD9D921F1A163700386465 = {
 			isa = PBXGroup;
 			children = (
@@ -225,6 +250,8 @@
 		32BD9DB51F1A199000386465 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				32AF5B971F4B542800E9480E /* UserDataModel */,
+				32AF5B931F4B536300E9480E /* DataBase */,
 				32F8647A1F243EF500571AC9 /* UniversalDataModel */,
 				32BD9DBB1F1A19DF00386465 /* Helper */,
 			);
@@ -416,6 +443,7 @@
 		DAB2B732B99942632521A5AB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				32AF5B9B1F4B564700E9480E /* CoreData.framework */,
 				32D8F38B1F27C0DD0034DF0E /* Photos.framework */,
 				32D8F38C1F27C0DD0034DF0E /* PhotosUI.framework */,
 				32A3F19B1F1FC557004599C2 /* UIKit.framework */,
@@ -459,6 +487,7 @@
 					32BD9D9A1F1A163700386465 = {
 						CreatedOnToolsVersion = 8.3;
 						DevelopmentTeam = MR2PX4Y62Y;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -564,6 +593,7 @@
 				32BD9DC31F1A1A6400386465 /* GlobalViewController.m in Sources */,
 				32BD9DFA1F1A31B600386465 /* VKSideMenu.m in Sources */,
 				4A0D0AE21F1CE274004BF60F /* InventoryViewController.m in Sources */,
+				32AF5B961F4B53A700E9480E /* Prasyst.xcdatamodeld in Sources */,
 				32BD9DA31F1A163700386465 /* AppDelegate.m in Sources */,
 				32BD9DA01F1A163700386465 /* main.m in Sources */,
 				32BD9E091F1A396100386465 /* sideMenuCell.m in Sources */,
@@ -573,6 +603,7 @@
 				4A0D0AE71F1CE391004BF60F /* InventoryCustomCell.m in Sources */,
 				32A3F1981F1FC437004599C2 /* RTSpinKitView.m in Sources */,
 				3204359F1F2FA06100B8B86C /* SortByCompanyViewController.m in Sources */,
+				32AF5B9A1F4B547500E9480E /* UserDataModel.m in Sources */,
 				32F2E1201F1D1C7D00767E99 /* AccountCustomCell.m in Sources */,
 				32BD9DBF1F1A1A0200386465 /* ClassForServerComm.m in Sources */,
 				4A0D0ADD1F1C8C06004BF60F /* AIDatePickerController.m in Sources */,
@@ -706,6 +737,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simplicity.swiftDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -721,6 +753,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.simplicity.swiftDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -746,6 +779,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		32AF5B941F4B53A700E9480E /* Prasyst.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				32AF5B951F4B53A700E9480E /* Prasyst.xcdatamodel */,
+			);
+			currentVersion = 32AF5B951F4B53A700E9480E /* Prasyst.xcdatamodel */;
+			path = Prasyst.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 32BD9D931F1A163700386465 /* Project object */;
 }

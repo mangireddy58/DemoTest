@@ -29,7 +29,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.responseArray count];
+    return accountsArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -52,23 +52,56 @@
     cell.viewBtn.tag = indexPath.row;
     [cell.viewBtn addTarget:self action:@selector(viewButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    NSDictionary *dict = [self.responseArray objectAtIndex:indexPath.row];
-    
-    if([dict valueForKey:@"type"] != NULL)
-        if([[dict valueForKey:@"type"] length] > 0)
-            cell.dataNameLabel.text =  [dict valueForKey:@"type"];
-    
+    cell.dataNameLabel.text = [accountsArray objectAtIndex:indexPath.row];
     cell.amountTxtFld.text = @"0";
-    if([dict valueForKey:@"amt"] != NULL)
-        if([[dict valueForKey:@"amt"] integerValue] > 0)
-            cell.amountTxtFld.text = [dict valueForKey:@"amt"];
+    
+    NSString *stringName = [[[accountsArray objectAtIndex:indexPath.row] lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    for (NSDictionary *dict in self.responseArray) {
+        if([dict valueForKey:@"type"] != NULL)
+            if([[dict valueForKey:@"type"] length] > 0){
+                NSLog(@"\n%@\n%@", [[dict valueForKey:@"type"] lowercaseString], stringName);
+                
+                if([[[dict valueForKey:@"type"] lowercaseString] isEqualToString:stringName]){
+                    if([dict valueForKey:@"amt"] != NULL)
+                        if([[dict valueForKey:@"amt"] integerValue] > 0)
+                            cell.amountTxtFld.text = [dict valueForKey:@"amt"];
+                }
+            }
+    }
     
     return cell;
 }
 - (void)viewButtonPressed:(UIButton *)sender {
     UIButton *viewButton = (UIButton *)sender;
-   self.objUniversalDataModel.accountDictionary = [self.responseArray objectAtIndex:viewButton.tag];
-    [self fnForAccountDetailViewController];
+    bool isValFound = false;
+    int i =-1;
+    NSString *stringName = [accountsArray objectAtIndex:viewButton.tag];
+    if(self.responseArray.count>0){
+    for(NSDictionary *dic in self.responseArray){
+        i++;
+        if([[[dic valueForKey:@"type"] lowercaseString] isEqualToString:[[stringName lowercaseString] stringByReplacingOccurrencesOfString:@" " withString:@""]]){
+            isValFound = true;
+            self.objUniversalDataModel.accountDictionary = [self.responseArray objectAtIndex:i];
+        }else{
+            NSDictionary *dic = [[NSDictionary alloc] init];
+            if(!isValFound){
+                dic = @{@"type":stringName,@"amt":@"0",@"qty":@"0"};
+                self.objUniversalDataModel.accountDictionary = dic;
+            }
+        }
+    }
+    }else{
+        NSDictionary *dic = [[NSDictionary alloc] init];
+        if(!isValFound){
+            dic = @{@"type":stringName,@"amt":@"0",@"qty":@"0"};
+            self.objUniversalDataModel.accountDictionary = dic;
+        }else{
+            
+        }
+    }
+    
+       [self fnForAccountDetailViewController];
 }
 - (IBAction)backAction:(id)sender {
     [self fnForMainDashAsRootViewController];

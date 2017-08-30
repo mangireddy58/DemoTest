@@ -19,7 +19,6 @@
     NSUInteger              *mClient_id;
     NSString                *mMainTypeString;
     NSString                *msortingString;
-    NSString                *mRegUnRegString;
     NSString                *mMobileNumString;
     NSString                *mLoggedString;
     NSDictionary             *mInventoryDictionary;
@@ -44,7 +43,6 @@
 @property (nonatomic, copy) NSString *fromDateString;
 @property (nonatomic, copy) NSString *toDateString;
 @property (nonatomic, copy) NSString *sortingString;
-@property (nonatomic, copy) NSString *regUnRegString;
 @property (nonatomic, copy) NSString *mobileNumString;
 @property (nonatomic, copy) NSString *loggedString;
 //General Data Array

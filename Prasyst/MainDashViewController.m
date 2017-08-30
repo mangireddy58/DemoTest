@@ -53,6 +53,14 @@
     
     //self.objUniversalDataModel.client_id = 5015;
     
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *date = [dateFormatter dateFromString:[dateFormatter stringFromDate:[NSDate date]]];
+    
+    self.fromDateTxtFld.text = [dateFormatter stringFromDate:date];
+    self.toDateTextFld.text = [dateFormatter stringFromDate:date];
+    self.objUniversalDataModel.toDateString = self.toDateTextFld.text;
+    
     self.inventoryBtn.hidden = YES;
     self.accountBtn.hidden = YES;
     self.countLbl.hidden = YES;
@@ -160,31 +168,27 @@
                                     if(!isInventory){
                                         [accountsListArray addObject:dict];
                                     }
-                                    
                                 }
                                 
                                 if([inventoryListArray count] > 0){
                                     self.objUniversalDataModel.inventoryDataArray = [NSArray arrayWithArray:inventoryListArray];
-                                    self.inventoryBtn.hidden = NO;
-                                }
-                                else{
-                                    self.inventoryBtn.hidden = YES;
                                 }
                                 
                                 if([accountsListArray count] > 0){
                                     self.objUniversalDataModel.accountsDataArray = [NSArray arrayWithArray:accountsListArray];
-                                    self.accountBtn.hidden = NO;
                                 }
-                                else{
-                                    self.accountBtn.hidden = YES;
-                                }
+                                
+                                self.inventoryBtn.hidden = NO;
+                                self.accountBtn.hidden = NO;
                             }
                             else{
                                 NSLog(@"Data not available.");
+                                [self fnForNoDataAvailable:@"No data available"];
                             }
                         }
                         else{
                             NSLog(@"Data not available.");
+                            [self fnForNoDataAvailable:@"No data available"];
                         }
                         
                     } @catch (NSException *exception) {
@@ -237,6 +241,7 @@
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd"];
             NSDate *date = [dateFormatter dateFromString:[dateFormatter stringFromDate:[NSDate date]]];
+            self.fromDateTxtFld.text = [dateFormatter stringFromDate:date];
             AIDatePickerController *datePickerViewController = [AIDatePickerController pickerWithDate:date selectedBlock:^(NSDate *selectedDate) {
                 __strong MainDashViewController *strongSelf = weakSelf;
                 [strongSelf dismissViewControllerAnimated:YES completion:nil];
@@ -254,10 +259,11 @@
             __weak MainDashViewController *weakSelf = self;
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-            NSString *toStr = [NSString stringWithFormat:@"%@",self.fromDateTxtFld.text];
+            //NSString *toStr = [NSString stringWithFormat:@"%@",self.fromDateTxtFld.text];
+            NSDate *date = [dateFormatter dateFromString:[dateFormatter stringFromDate:[NSDate date]]];
             [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-            NSDate *dateOne = [dateFormatter dateFromString:toStr];
-            AIDatePickerController *datePickerViewController = [AIDatePickerController pickerWithDate:dateOne selectedBlock:^(NSDate *selectedDate) {
+            //NSDate *dateOne = [dateFormatter dateFromString:toStr];
+            AIDatePickerController *datePickerViewController = [AIDatePickerController pickerWithDate:date selectedBlock:^(NSDate *selectedDate) {
                 __strong MainDashViewController *strongSelf = weakSelf;
                 [strongSelf dismissViewControllerAnimated:YES completion:nil];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd"];
@@ -267,7 +273,7 @@
                 __strong MainDashViewController *strongSelf = weakSelf;
                 [strongSelf dismissViewControllerAnimated:YES completion:nil];
             }];
-            datePickerViewController.datePicker.minimumDate = dateOne;
+            //datePickerViewController.datePicker.minimumDate = date;
             [self presentViewController:datePickerViewController animated:YES completion:nil];
         }
             break;
