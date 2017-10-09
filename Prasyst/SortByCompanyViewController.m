@@ -133,9 +133,6 @@
         cell = (SortByTableViewCell *)[myNib lastObject];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    
-    
     cell.typeNameLbl.text = [self.branchArray objectAtIndex:indexPath.row];
     cell.amountQtyLbl.text = [[@"Qty: " stringByAppendingString:[self.qtyArray objectAtIndex:indexPath.row]] stringByAppendingString:[@", Amt:" stringByAppendingString:[self.amtArray objectAtIndex:indexPath.row]]];
     /* for (NSDictionary *dic2 in array2Res) {
@@ -154,15 +151,10 @@
         if([dict objectForKey:@"branch"] != NULL)
             if([[dict objectForKey:@"branch"] length] > 0)
                 cell.typeNameLbl.text = [dict objectForKey:@"branch"];*/
-    
-    
     [self hideProgressIndicator];
     return cell;
-    
 }
-
-
 - (IBAction)dismissBtnAction:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 @end

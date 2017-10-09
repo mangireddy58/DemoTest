@@ -40,8 +40,8 @@
     [self addProgressIndicator];
     [self hideProgressIndicator];
     
-   // self.mobileNoTxtFld.text = @"8779163857";
-    //self.passwordTxtFld.text = @"2017";
+//    self.mobileNoTxtFld.text = @"8779163857";
+//    self.passwordTxtFld.text = @"2017";
     
     switch ((VIEWHEIGHT == 568)?1:((VIEWHEIGHT == 667)?2:3)) {
         case 1:{
@@ -64,38 +64,40 @@
 
 #pragma mark - Login Button
 - (IBAction)loginBtnAction:(id)sender {
-        if ((self.mobileNoTxtFld.text.length < 10 )) {
-            [self.mobileNoTxtFld becomeFirstResponder];
-        }
-        else if (self.passwordTxtFld.text.length == 0) {
-            [self.passwordTxtFld becomeFirstResponder];
-        }
-        else {
-            if([UserDataModel getUserDataModel].userName.length > 0 && [UserDataModel getUserDataModel].password.length > 0){
-                [self showProgressIndicator];
-                [self fnForLoginService];
-            }
-            else{
-                NSLog(@"register");
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Register" message:@"Do you want to register" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    
-                }];
-                UIAlertAction *regi = [UIAlertAction actionWithTitle:@"REGISTER" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [self showProgressIndicator];
-                    NSString *deviceUUID = [[[UIDevice currentDevice] identifierForVendor]UUIDString];
-                    NSLog(@"imei %@",deviceUUID);
-                    NSString *lLoginParams = [NSString stringWithFormat:REGISTRED_QUERY,deviceUUID, self.mobileNoTxtFld.text];
-                    ClassForServerComm *objForServerComm = [[ClassForServerComm alloc] init];
-                    objForServerComm.delegate = self;
-                    kWebServiceFlag = login_url_tag;
-                    [objForServerComm sendHttpRequestWithParam:lLoginParams andServiceName:REGISTRED_URL];
-                }];
-                [alert addAction:no];
-                [alert addAction:regi];
-                [self presentViewController:alert animated:YES completion:nil];
-            }
-        }
+    if ((self.mobileNoTxtFld.text.length < 10 )) {
+        [self.mobileNoTxtFld becomeFirstResponder];
+    }
+    else if (self.passwordTxtFld.text.length == 0) {
+        [self.passwordTxtFld becomeFirstResponder];
+    }
+    else {
+        [self fnForRegisterUser];
+        
+//        if([UserDataModel getUserDataModel].userName.length > 0 && [UserDataModel getUserDataModel].password.length > 0){
+//            [self showProgressIndicator];
+//            [self fnForLoginService];
+//        }
+//        else{
+//            NSLog(@"register");
+//            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Register" message:@"Do you want to register" preferredStyle:UIAlertControllerStyleAlert];
+//            UIAlertAction *no = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//                
+//            }];
+//            UIAlertAction *regi = [UIAlertAction actionWithTitle:@"REGISTER" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                [self showProgressIndicator];
+//                NSString *deviceUUID = [[[UIDevice currentDevice] identifierForVendor]UUIDString];
+//                NSLog(@"imei %@",deviceUUID);
+//                NSString *lLoginParams = [NSString stringWithFormat:REGISTRED_QUERY,deviceUUID, self.mobileNoTxtFld.text];
+//                ClassForServerComm *objForServerComm = [[ClassForServerComm alloc] init];
+//                objForServerComm.delegate = self;
+//                kWebServiceFlag = login_url_tag;
+//                [objForServerComm sendHttpRequestWithParam:lLoginParams andServiceName:REGISTRED_URL];
+//            }];
+//            [alert addAction:no];
+//            [alert addAction:regi];
+//            [self presentViewController:alert animated:YES completion:nil];
+//        }
+    }
 }
 
 - (void)fnForLoginService{
@@ -128,10 +130,6 @@
                                         
                                         UserDataModel *objUserDataModel = [UserDataModel getUserDataModel];
                                         [objUserDataModel saveUserData:self.mobileNoTxtFld.text password:self.passwordTxtFld.text];
-                                        
-                                        
-                                        //NSLog(@"client_id: %d", [[responseDict objectForKey:@"id"] integerValue]);
-//                                        self.objUniversalDataModel.loggedString = @"1";
                                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                         [defaults setObject:@"1" forKey:@"userLoggedIn"];
                                         [defaults synchronize];
@@ -200,11 +198,23 @@
         NSLog(@"registred successfully:%@", str);
         if ([str isEqualToString:@"0"]) {
             [self hideProgressIndicator];
+            [self fnForLoginService];
+//            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Register" message:@"Do you want to register" preferredStyle:UIAlertControllerStyleAlert];
+//            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//            }];
+//            UIAlertAction *reg = [UIAlertAction actionWithTitle:@"REGISTER" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                [self loginBtnAction:self];
+//            }];
+//            [alert addAction:ok];
+//            [alert addAction:reg];
+//            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Register" message:@"Do you want to register" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *ok = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             }];
             UIAlertAction *reg = [UIAlertAction actionWithTitle:@"REGISTER" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self loginBtnAction:self];
+                [self fnForLoginService];
             }];
             [alert addAction:ok];
             [alert addAction:reg];

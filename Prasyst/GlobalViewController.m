@@ -145,14 +145,13 @@
     if (IS_IPHONE) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
         SortByCompanyViewController *sortVC = [storyboard instantiateViewControllerWithIdentifier:@"SortByCompanyViewController"];
-        [self.navigationController presentViewController:sortVC animated:YES completion:nil];//:sortVC animated:YES];
-        //[self.navigationController pushViewController:sortVC animated:YES];
+        [self.navigationController presentViewController:sortVC animated:YES completion:nil];
     }
     else {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPad" bundle: nil];
         SortByCompanyViewController *sortVC = [storyboard instantiateViewControllerWithIdentifier:@"SortByCompanyViewController"];
-        [self.navigationController pushViewController:sortVC animated:YES];
-        //[self.navigationController pushViewController:sortVC animated:YES];
+        [self presentViewController:sortVC animated:YES completion:nil];
+//        [self.navigationController pushViewController:sortVC animated:YES];
     }
 }
 #pragma mark - UnRegister Method
@@ -196,7 +195,7 @@
 }
 #pragma amrk - No data available
 - (void) fnForNoDataAvailable:(NSString *)messageStr {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"PGSOl" message:messageStr preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"PGSOl" message:messageStr preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         
     }];

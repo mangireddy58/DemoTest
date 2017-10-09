@@ -3,7 +3,7 @@ platform :ios, '8.0'
 
 target 'Prasyst' do
   
-  pod 'AFNetworking', '~> 3.0'
+  pod 'AFNetworking/NSURLSession'
   pod 'IQKeyboardManager'
 
 end
